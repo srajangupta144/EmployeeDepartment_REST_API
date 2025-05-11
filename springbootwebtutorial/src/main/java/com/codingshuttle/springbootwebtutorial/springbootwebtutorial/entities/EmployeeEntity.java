@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity                                 //tells JPA or Hibernate that convert this class as Table in database
-@Table(name = "employees")              //give name to table else class name is taken bydefault
+@Table(name = "employees")              //give name to table else class name is taken by default
 
 @Getter
 @Setter
