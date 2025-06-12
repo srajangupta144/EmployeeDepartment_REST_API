@@ -1,6 +1,7 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,8 @@ public class EmployeeEntity {
     private String name;
     private String email;
     private Integer age;
+    private String role;
+    private Integer salary;
     private LocalDate dateOfJoining;
     private Boolean isActive;
-
-
 }
