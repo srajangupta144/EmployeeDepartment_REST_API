@@ -13,7 +13,7 @@ public class GlobalAdvices {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiError> handleResourceNotFound(NoSuchElementException exception){
         ApiError apiError=ApiError.builder()
-                .message("Resource Not Found")
+                .message(exception.getMessage())
                 .status(HttpStatus.NOT_FOUND)
                 .build();
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);

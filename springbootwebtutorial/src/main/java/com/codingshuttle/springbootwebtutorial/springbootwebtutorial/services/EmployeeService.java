@@ -5,6 +5,7 @@ import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.Employe
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -12,6 +13,7 @@ import java.lang.reflect.Field;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,22 +49,20 @@ public class EmployeeService {
         return modelMapper.map(savedEmployeeEntity,EmployeeDTO.class);
     }
     public EmployeeDTO updateEmployeeById(Long employeeID, EmployeeDTO employeeDTO) {
-        boolean exists=isExistsEmployeeID(employeeID);
-        if (!exists) return null;
+        Optional<EmployeeEntity> existingEntity = employeeRepository.findById(employeeID);
+        if (!existingEntity.isPresent()) {
+            throw new NoSuchElementException("No employee was found from this id");
+        }
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         employeeEntity.setId(employeeID);
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(employeeEntity);
         return modelMapper.map(savedEmployeeEntity, EmployeeDTO.class);
     }
 
-    public boolean isExistsEmployeeID(Long employeeID) {
-        return employeeRepository.existsById(employeeID);
-    }
 
-    public EmployeeDTO updatePartialEmployeeByID(Long employeeID, Map<String, Object> updates) {
-        boolean exists=isExistsEmployeeID(employeeID);
-        if (!exists) return null;
-        EmployeeEntity employeeEntity = employeeRepository.findById(employeeID).get();
+     public EmployeeDTO updatePartialEmployeeByID(Long employeeID, Map<String, Object> updates) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeID)
+                .orElseThrow(()-> new NoSuchElementException("No employee was found from this id"));
         System.out.println("Received updates: " + updates);
 
         updates.forEach((field, value) ->  {
@@ -75,7 +75,8 @@ public class EmployeeService {
         return modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
     }
     public boolean deleteEmployeeById(Long id) {
-        if(!isExistsEmployeeID(id))return false;
+        EmployeeEntity employeeEntity = employeeRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("No employee was found from this id"));
         employeeRepository.deleteById(id);
         return true;
     }
