@@ -5,6 +5,7 @@ import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.Employe
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.DepartmentEntity;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.DepartmentRepository;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
 
-    public DepartmentService(DepartmentRepository departmentRepository, ModelMapper modelMapper) {
+    public DepartmentService(DepartmentRepository departmentRepository, EmployeeRepository employeeRepository, ModelMapper modelMapper) {
         this.departmentRepository = departmentRepository;
+        this.employeeRepository=employeeRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -84,4 +87,14 @@ public class DepartmentService {
         return modelMapper.map(departmentRepository.save(departmentEntity), DepartmentDTO.class);
 
     }
+
+    public List<EmployeeDTO> getEmployeesByDepartmentId(Long departmentId) {
+        DepartmentEntity department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new NoSuchElementException("Department not found with id: " + departmentId));
+        List<EmployeeEntity> employees = employeeRepository.findByDepartmentId(departmentId);
+        return employees.stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -20,7 +20,7 @@ public class DepartmentDTO {
     private Long id;
     @NotNull(message = "Title is required")
     private String title;
-    @AssertTrue(message = "Employee should be active")
+    @AssertTrue(message = "Department should be active")
     @JsonProperty("isActive")
     private Boolean isActive;
     @PastOrPresent(message = "Date of creation cannot be in future")

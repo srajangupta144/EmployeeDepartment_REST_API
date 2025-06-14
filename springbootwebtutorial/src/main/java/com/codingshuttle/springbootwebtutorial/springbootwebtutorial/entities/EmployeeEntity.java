@@ -1,5 +1,6 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,10 @@ public class EmployeeEntity {
     private Integer salary;
     private LocalDate dateOfJoining;
     private Boolean isActive;
+
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    @JsonBackReference
+    private DepartmentEntity department;
 }

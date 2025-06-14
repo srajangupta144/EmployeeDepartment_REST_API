@@ -1,5 +1,6 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.controllers;
 
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.DepartmentDTO;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.EmployeeDTO;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
@@ -42,6 +43,12 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required = false,name = "inputAge")Integer age,
                             @RequestParam(required = false)String sortBy){
         return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    @GetMapping("/{employeeId}/department")
+    public ResponseEntity<DepartmentDTO> getDepartmentByEmployeeId(@PathVariable Long employeeId) {
+        DepartmentDTO departmentDTO = employeeService.getDepartmentByEmployeeId(employeeId);
+        return ResponseEntity.ok(departmentDTO);
     }
 
     @PostMapping()

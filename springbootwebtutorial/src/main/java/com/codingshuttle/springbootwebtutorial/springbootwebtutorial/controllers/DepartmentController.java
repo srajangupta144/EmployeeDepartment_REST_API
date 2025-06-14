@@ -33,6 +33,12 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.getAllDepartments());
     }
 
+    @GetMapping("/{departmentId}/employees")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByDepartmentId(@PathVariable Long departmentId) {
+        List<EmployeeDTO> employeeDTOs = departmentService.getEmployeesByDepartmentId(departmentId);
+        return ResponseEntity.ok(employeeDTOs);
+    }
+
     @PostMapping()
     public ResponseEntity<DepartmentDTO> createNewDepartment(@RequestBody @Valid DepartmentDTO inputDepartment){
         DepartmentDTO savedDepartment=departmentService.createNewDepartment(inputDepartment);

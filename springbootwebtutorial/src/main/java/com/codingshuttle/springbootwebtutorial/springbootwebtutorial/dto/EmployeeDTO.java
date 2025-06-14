@@ -19,6 +19,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class  EmployeeDTO {
     private Long id;
+    private Long departmentId;
     @NotNull(message = "Name is Required")
     @Size(min = 3, max = 20, message = "Number of Characters in name should be in the range:[3,10]")
     private String name;
