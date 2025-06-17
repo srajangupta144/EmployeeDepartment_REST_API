@@ -8,6 +8,8 @@ import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.Em
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.DepartmentRepository;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -41,13 +43,11 @@ public class EmployeeService {
                         modelMapper.map(employeeEntity,EmployeeDTO.class));
     }
 
-    public List<EmployeeDTO> getAllEmployees() {
-        List<EmployeeEntity> employeeEntities=employeeRepository.findAll();
-        return employeeEntities
-                .stream()
-                .map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDTO.class))
-                .collect(Collectors.toList());
+    public Page<EmployeeDTO> getAllEmployees(Pageable pageable) {
+        Page<EmployeeEntity> employeeEntities=employeeRepository.findAll(pageable);
+        return employeeEntities.map(entity -> modelMapper.map(entity,EmployeeDTO.class));
     }
+
     public EmployeeDTO createNewEmployee(EmployeeDTO inputEmployee) {
         Long departmentId = inputEmployee.getDepartmentId();
         DepartmentEntity department = departmentRepository.findById(departmentId)

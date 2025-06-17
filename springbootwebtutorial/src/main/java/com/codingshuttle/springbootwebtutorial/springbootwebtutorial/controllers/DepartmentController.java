@@ -28,9 +28,9 @@ public class DepartmentController {
                 .orElseThrow(()-> new NoSuchElementException("Resource not found"));
     }
     @GetMapping()
-    public ResponseEntity<List<DepartmentDTO>> getAllDepartment(@RequestParam (required = false,name="inputTitle") String title,
-                                                                @RequestParam(required = false)String sortBy){
-        return ResponseEntity.ok(departmentService.getAllDepartments());
+    public ResponseEntity<List<DepartmentDTO>> getAllDepartment(@RequestParam (required = false,name="inputTitle") String title
+                                                                ){
+        return ResponseEntity.ok(departmentService.getAllDepartments(title));
     }
 
     @GetMapping("/{departmentId}/employees")

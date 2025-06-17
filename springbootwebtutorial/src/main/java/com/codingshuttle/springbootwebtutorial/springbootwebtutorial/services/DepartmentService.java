@@ -38,11 +38,17 @@ public class DepartmentService {
                     modelMapper.map(departmentEntity, DepartmentDTO.class));
     }
 
-    public List<DepartmentDTO> getAllDepartments() {
-        List<DepartmentEntity> departmentEntities=departmentRepository.findAll();
+    public List<DepartmentDTO> getAllDepartments(String title) {
+        List<DepartmentEntity> departmentEntities;
+        if (title != null && !title.isEmpty()) {
+            departmentEntities = departmentRepository.findByTitleContainingIgnoreCase(title);
+        } else {
+            departmentEntities = departmentRepository.findAll();
+        }
+
         return departmentEntities
                 .stream()
-                .map(departmentEntity -> modelMapper.map(departmentEntity, DepartmentDTO.class))
+                .map(entity -> modelMapper.map(entity, DepartmentDTO.class))
                 .collect(Collectors.toList());
     }
 

@@ -6,6 +6,9 @@ import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.Em
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.services.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +43,8 @@ public class EmployeeController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required = false,name = "inputAge")Integer age,
-                            @RequestParam(required = false)String sortBy){
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public ResponseEntity<Page<EmployeeDTO>> getAllEmployees(@PageableDefault(page =0, size = 3, sort = "id") Pageable pageable){
+        return ResponseEntity.ok(employeeService.getAllEmployees(pageable));
     }
 
     @GetMapping("/{employeeId}/department")
